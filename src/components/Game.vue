@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper game">
     <div>
-      <div>
+      <div class="header">
         <h2>{{getGameStatus()}}</h2>
       </div>
       <div class="letters-wrapper">
@@ -20,29 +20,33 @@
                       class="key"
                       v-shortkey.once="[key]"
                       @shortkey="pushLetter(key)" @click="pushLetter(key)"
-                      :disabled="checkLetterPressed(key)">
+                      :disabled="checkLetterPressed(key) || (lose || won)">
                 {{ key }}
               </button>
             </template>
           </div>
         </template>
+          <button v-if="lose || won" class="key-restart" @click="restartGame()">{{lose ? 'Try again' : 'Play new game'}}</button>
       </section>
     </div>
   </div>
 </template>
 
 <script>
+const words = ["facebook", "github", "cake"];
+
 export default {
   name: 'Game',
   data() {
     return {
       chancesLeft: 6,
-      initialWord: 'qwerty',
+      initialWord: '',
       hiddenWord: [],
-      word: [],
       pressedKey: '',
       pressedKeys: [],
       keyboard: ['qwertyuiop'.split(''), 'asdfghjkl'.split(''), 'zxcvbnm'.split('')],
+      lose: false,
+      won: false,
     };
   },
   mounted() {
@@ -53,21 +57,30 @@ export default {
       this.prepareWord();
     },
     prepareWord() {
+      const random = Math.floor(Math.random() * words.length);
+      this.initialWord = words[random];
       this.hiddenWord = this.initialWord.split('');
     },
     checkLetterPressed(key) {
       return this.pressedKeys.find(item => item === key);
     },
     getGameStatus() {
+      const success = this.hiddenWord.every((val) => this.pressedKeys.includes(val));
+     
+     if (success && this.pressedKey) {
+        this.won = true;
+        return 'You Won!'; 
+      };
+
       if (this.chancesLeft) {
         return `Chances left: ${this.chancesLeft}`;
-      } else if (this.chancesLeft && this.pressedKeys) {
-        return 'Yes'; // TODO: FINISH
-      } else if (this.chancesLeft === 0) {
-        return 'You lose';
-      }
+      } else {
+          this.lose = true;
+        return 'You Lose!';
+      };
     },
     pushLetter(letter) {
+      if (this.won || this.lose) return;
       if (this.checkLetterPressed(letter)) {
         return;
       }
@@ -76,7 +89,16 @@ export default {
       }
       this.pressedKey = letter;
       this.pressedKeys.push(letter);
+      this.getGameStatus()
     },
+    restartGame() {
+    this.prepareWord();
+    this.lose = false;
+    this.won = false;
+    this.pressedKey = '';
+    this.pressedKeys = [];
+    this.chancesLeft = 6;
+    }
   },
 };
 </script>
