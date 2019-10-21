@@ -1,6 +1,3 @@
-.header {
-  text-align: center;
-}
 
 .game {
   list-style: none;
@@ -13,6 +10,15 @@
 .game > div {
   width: 80%;
   margin: 0 20%;
+}
+
+.hangman {
+  display: flex;
+  justify-content: center;
+}
+
+.counter {
+  text-align: center;
 }
 
 .letters-wrapper {
