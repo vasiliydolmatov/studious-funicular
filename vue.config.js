@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/studious-funicular/'
-    }
+  publicPath: '/studious-funicular/',
+};
