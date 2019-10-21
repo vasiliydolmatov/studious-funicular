@@ -1,3 +1,6 @@
+.header {
+  text-align: center;
+}
 
 .game {
   /*flex: 9;*/
@@ -75,13 +78,13 @@
   height: 50px;
   width: 50px;
 }
-.key:hover, .key-restart:hover {
+.key:hover, .button-restart:hover {
   background-color: #2EE59D;
   box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
   color: #fff;
   transform: translateY(-7px);
 }
-.key:disabled, .key-restart:disabled {
+.key:disabled {
   cursor: default;
   opacity: 0.25;
 }
@@ -96,13 +99,30 @@
   }
 }
 
-.key-restart {
-  height: 70px;
-  width: 100px;
+.button-restart {
+  height: 50px;
+  border: none;
+  padding: 15px;
+  margin: 0.5vh;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  touch-action: manipulation;
+  outline: 0;
+  font-size: 1.65vh;
+  background-color: #fff;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  outline: none;
 }
 
-.header {
-  text-align: center;
-  /* display: flex; */
-  /* justify-content: center; */
+
+
+.footer {
+  margin-top: 3.5vh; 
+  display: flex;
+  justify-content: center;
+  height: 60px;
 }

@@ -16,24 +16,31 @@
         <template v-for="(keys, idx) in keyboard">
           <div v-bind:key="idx" class="keyLine">
             <template v-for="(key, idx1) in keys">
-              <button v-bind:key="idx1"
-                      class="key"
-                      v-shortkey.once="[key]"
-                      @shortkey="pushLetter(key)" @click="pushLetter(key)"
-                      :disabled="checkLetterPressed(key) || (lose || won)">
-                {{ key }}
-              </button>
+              <button
+                v-bind:key="idx1"
+                class="key"
+                v-shortkey.once="[key]"
+                @shortkey="pushLetter(key)"
+                @click="pushLetter(key)"
+                :disabled="checkLetterPressed(key) || (lose || won)"
+              >{{ key }}</button>
             </template>
           </div>
         </template>
-          <button v-if="lose || won" class="key-restart" @click="restartGame()">{{lose ? 'Try again' : 'Play new game'}}</button>
       </section>
+      <div class="footer">
+        <button
+          v-if="lose || won"
+          class="button-restart"
+          @click="restartGame()"
+        >{{lose ? 'New game' : 'Continue'}}</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-const words = ["facebook", "github", "cake"];
+const words = ['facebook', 'github', 'cake'];
 
 export default {
   name: 'Game',
@@ -44,7 +51,11 @@ export default {
       hiddenWord: [],
       pressedKey: '',
       pressedKeys: [],
-      keyboard: ['qwertyuiop'.split(''), 'asdfghjkl'.split(''), 'zxcvbnm'.split('')],
+      keyboard: [
+        'qwertyuiop'.split(''),
+        'asdfghjkl'.split(''),
+        'zxcvbnm'.split(''),
+      ],
       lose: false,
       won: false,
     };
@@ -65,19 +76,19 @@ export default {
       return this.pressedKeys.find(item => item === key);
     },
     getGameStatus() {
-      const success = this.hiddenWord.every((val) => this.pressedKeys.includes(val));
-     
-     if (success && this.pressedKey) {
+      const success = this.hiddenWord.every(val =>
+        this.pressedKeys.includes(val),
+      );
+      if (success && this.pressedKey) {
         this.won = true;
-        return 'You Won!'; 
-      };
+        return 'You Won!';
+      }
 
       if (this.chancesLeft) {
         return `Chances left: ${this.chancesLeft}`;
-      } else {
-          this.lose = true;
-        return 'You Lose!';
-      };
+      }
+      this.lose = true;
+      return 'You Lose!';
     },
     pushLetter(letter) {
       if (this.won || this.lose) return;
@@ -89,16 +100,16 @@ export default {
       }
       this.pressedKey = letter;
       this.pressedKeys.push(letter);
-      this.getGameStatus()
+      this.getGameStatus();
     },
     restartGame() {
-    this.prepareWord();
-    this.lose = false;
-    this.won = false;
-    this.pressedKey = '';
-    this.pressedKeys = [];
-    this.chancesLeft = 6;
-    }
+      this.prepareWord();
+      this.lose = false;
+      this.won = false;
+      this.pressedKey = '';
+      this.pressedKeys = [];
+      this.chancesLeft = 6;
+    },
   },
 };
 </script>

@@ -10,6 +10,6 @@ export default new Router({
       path: '/',
       name: 'Game',
       component: Game,
-    }
+    },
   ],
 });
