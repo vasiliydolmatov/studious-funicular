@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper game">
-   <div class="hangman">
+    <div class="hangman">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -89,46 +89,45 @@
           style="stroke:black;fill:none;stroke-width:2px;"
         />
       </svg>
-     </div>
-      <div class="counter">
-        <h2>{{getGameStatus()}}</h2>
-      </div>
-      <div class="letters-wrapper">
-        <template v-for="(letter, idx) in hiddenWord">
-          <div v-bind:key="idx" :class="{letter: true, blankspace: letter === ' '}">
-            <h2>{{checkLetterPressed(letter) ? letter : ''}}</h2>
-          </div>
-        </template>
-      </div>
-
-      <section class="keyboard-wrapper" id="keyboard">
-        <template v-for="(keys, idx) in keyboard">
-          <div v-bind:key="idx" class="keyLine">
-            <template v-for="(key, idx1) in keys">
-              <button
-                v-bind:key="idx1"
-                class="key"
-                v-shortkey.once="[key]"
-                @shortkey="pushLetter(key)"
-                @click="pushLetter(key)"
-                :disabled="checkLetterPressed(key) || (lose || won)"
-              >{{ key }}</button>
-            </template>
-          </div>
-        </template>
-      </section>
-      <div class="footer">
-        <button
-          v-if="lose || won"
-          class="button-restart"
-          @click="restartGame()"
-        >{{lose ? "New game" : "Continue"}}</button>
-      </div>
     </div>
+    <div class="counter">
+      <h2>{{getGameStatus()}}</h2>
+    </div>
+    <div class="letters-wrapper">
+      <template v-for="(letter, idx) in hiddenWord">
+        <div v-bind:key="idx" :class="{letter: true, blankspace: letter === ' '}">
+          <h2>{{checkLetterPressed(letter) ? letter : ''}}</h2>
+        </div>
+      </template>
+    </div>
+
+    <section class="keyboard-wrapper" id="keyboard">
+      <template v-for="(keys, idx) in keyboard">
+        <div v-bind:key="idx" class="keyLine">
+          <template v-for="(key, idx1) in keys">
+            <button
+              v-bind:key="idx1"
+              class="key"
+              v-shortkey.once="[key]"
+              @shortkey="pushLetter(key)"
+              @click="pushLetter(key)"
+              :disabled="checkLetterPressed(key) || (lose || won)"
+            >{{ key }}</button>
+          </template>
+        </div>
+      </template>
+    </section>
+    <div class="footer">
+      <button
+        v-if="lose || won"
+        class="button-restart"
+        @click="restartGame()"
+      >{{lose ? "New game" : "Continue"}}</button>
+    </div>
+  </div>
 </template>
 
 <script>
-const words = ['facebook', 'github', 'cake'];
 
 export default {
   name: 'Game',
@@ -155,10 +154,10 @@ export default {
     setup() {
       this.prepareWord();
     },
-    prepareWord() {
-      const random = Math.floor(Math.random() * words.length);
-      this.initialWord = words[random];
-      this.hiddenWord = this.initialWord.split('');
+    async prepareWord() {
+        const apiKey = await this.$http.get(`https://random-word-api.herokuapp.com/key?`);
+        const randomWord = await this.$http.get(`https://random-word-api.herokuapp.com/word?key=${apiKey.bodyText}&number=1`);
+        this.hiddenWord = randomWord.body[0].split('');
     },
     checkLetterPressed(key) {
       return this.pressedKeys.find(item => item === key);
