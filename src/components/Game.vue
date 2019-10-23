@@ -145,6 +145,7 @@ export default {
       ],
       lose: false,
       won: false,
+      isLoading:true,
     };
   },
   mounted() {
@@ -155,11 +156,14 @@ export default {
       this.prepareWord();
     },
     async prepareWord() {
+      try {
         const apiKey = await this.$http.get(`https://cors-anywhere.herokuapp.com/https://random-word-api.herokuapp.com/key?`);
         const randomWord = await this.$http.get(`https://random-word-api.herokuapp.com/word?key=${apiKey.bodyText}&number=1`);
-        console.log('randomWord',randomWord);
-        
+        console.log('randomWord', randomWord);
         this.hiddenWord = randomWord.body[0].split('');
+      } catch (err) {
+        console.log('Something went wrong');
+      }
     },
     checkLetterPressed(key) {
       return this.pressedKeys.find(item => item === key);
