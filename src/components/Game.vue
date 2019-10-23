@@ -155,8 +155,10 @@ export default {
       this.prepareWord();
     },
     async prepareWord() {
-        const apiKey = await this.$http.get(`https://random-word-api.herokuapp.com/key?`);
+        const apiKey = await this.$http.get(`https://cors-anywhere.herokuapp.com/https://random-word-api.herokuapp.com/key?`);
         const randomWord = await this.$http.get(`https://random-word-api.herokuapp.com/word?key=${apiKey.bodyText}&number=1`);
+        console.log('randomWord',randomWord);
+        
         this.hiddenWord = randomWord.body[0].split('');
     },
     checkLetterPressed(key) {
